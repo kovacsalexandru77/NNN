@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <title>Itorrent iframe with Sidebar and Clock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    iframe {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 1; /* Legalsó réteg */
+    }
+
+    /* Slideshow a frame fölött, fix magasság és teljes szélesség */
+    .carousel-wrapper {
+      position: fixed;
+      top: 10; /* legfelül */
+      left: 0;
+      width: 100%;
+      height: 150px; /* vagy amekkora a slideshow magassága */
+      background-color: rgba(50, 50, 50, 0.7); /* sötétszürke áttetsző háttér */
+      z-index: 5; /* iframe fölött */
+      display: flex;
+      align-items: center;
+      padding: 0 80px; /* hogy ne érjen rá a sidebarra */
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      animation: scroll 40s linear infinite;
+      width: max-content;
+    }
+
+    .slide {
+      flex: 0 0 auto;
+      width: 120px;
+      margin: 0 10px;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+      display: block;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Sidebar ikonok a slideshow fölött, fix pozíció */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 60px;
+      background-color: rgba(17, 17, 17, 0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 30px;
+      z-index: 10; /* slideshow fölött */
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #00f7ff;
+      font-size: 24px;
+      margin: 18px 0;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .sidebar a:hover {
+      color: #ff00ff;
+      transform: scale(1.2);
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    /* Óra */
+    .clock {
+      position: fixed;
+      top: 4px;
+      right: 17px;
+      font-size: 16px;
+      color: cyan;
+      background-color: #000;
+      padding: 7px 16px;
+      border-radius: 6px;
+      z-index: 15; /* sidebar fölött */
+      font-weight: bold;
+    }
+
+    /* Vertical text */
+    .vertical-text {
+      position: fixed;
+      left: 0;
+      top: 0;
+      color: cyan;
+      font-size: 18px;
+      background-color: #000;
+      padding: 12px;
+      z-index: 10;
+      white-space: nowrap;
+      width: 100%;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Iframe: háttérben -->
+  <iframe src="https://netfree2.cc/tv/home/" allowfullscreen></iframe>
+
+  <!-- Slideshow -->
+  <div class="carousel-wrapper">
+    <button class="nav-btn left-btn" onclick="changeDirection('left')">&#10094;</button>
+    <button class="nav-btn right-btn" onclick="changeDirection('right')">&#10095;</button>
+    <div class="carousel-track" id="carouselTrack">
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/fNayx3FYA9AfXxhYdgIUQT3fM8v.jpg" alt="Film 1"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/tVyM1jnAwCZfCyy9WtGUMbawfGk.jpg" alt="Film 2"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/udke9xZBSxe17uxbvKlMFQ8K0CW.jpg" alt="Film 3"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/ujQ6CBayG600cAcmUIlqLFvwAl6.jpg" alt="Film 4"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/blvyc8dFjT2yzV6Pg0wTP03Qhqb.jpg" alt="Film 5"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/vr20UIrV0jxe0ntkLqbPNyIwvAm.jpg" alt="Film 6"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/5EpRU422dCw6KdoEzhuHwNUdCL.jpg" alt="Film 7"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/xBiZvfrWjA5wFTqpWOW6wm8MVcy.jpg" alt="Film 8"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/4iZn7wQNh05BEzsir8t2MPVDNW3.jpg" alt="Film 9"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/uq9qxu4p9zpow1odHHmy3lEaKEu.jpg" alt="Film 10"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/muMh7qYMxB4H7HQVJIouWB7kQge.jpg" alt="Film 11"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/6xtI3JPk8yJCRuDhZrCw0rSaIkc.jpg" alt="Film 12"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/5mIR5b4cv4YqbHDjrdGabXc7jlQ.jpg" alt="Film 13"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/h7danAcmsmYCY21guTxVhkWZGHd.jpg" alt="Film 14"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/aVvw81wGJlDqx9qotbdh53emebR.jpg" alt="Film 15"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/qNAA54nU30jshNmvUGbeg0kCotX.jpg" alt="Film 16"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/wvcIONukapypq7cAF7s0IFfWOK1.jpg" alt="Film 17"></div>
+      <div class="slide"><img src="https://image.tmdb.org/t/p/original/mU9jwhggx117R6Ck6tgBIkXhu5P.jpg" alt="Film 18"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="https://kovacsalexandru77.github.io/NNN/" target="_blank">
+      <img src="https://ia601805.us.archive.org/21/items/netflix1_202506/netflix1.png" alt="NetFlix" width="24" height="24" style="vertical-align: middle;">
+    </a>
+    <a href="https://kovacsalexandru77.github.io/NNN/" target="_blank"><i class="bi bi-house"></i></a>
+    <a href="https://kovacsalexandru77.github.io/moviess/" target="_blank"><i class="bi bi-film"></i></a>
+    <a href="https://kovacsalexandru77.github.io/Seriess/" target="_blank"><i class="bi bi-collection-play"></i></a>
+  </div>
+
+  <!-- Vertical text -->
+  <div class="vertical-text">Nᴇᴛꜰʟɪx Sᴀɴᴅᴜ▶</div>
+
+  <!-- Clock -->
+  <div class="clock" id="clock"></div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+    }
+
+    const track = document.getElementById('carouselTrack');
+    let direction = 'right';
+    let speed = 40;
+
+    function changeDirection(dir) {
+      direction = dir;
+      track.style.animation = 'none';
+      void track.offsetWidth; // újraindítás trükk
+      track.style.animation = `scroll ${speed}s linear infinite`;
+      track.style.animationDirection = dir === 'left' ? 'reverse' : 'normal';
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
